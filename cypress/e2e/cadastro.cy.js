@@ -1,88 +1,197 @@
 /// <reference types= "cypress"/>
 
-
-
 describe('Cadastro site kanui ', () => {
   const faker = require('faker-br')
-  
-  
-  // beforeEach(() => {
-  //   cy.generateUser()
-  //   cy.fixture('user').then(data => {
-  //     cy.log('fixture is:', data);
-  //   });
-  // })
-  
 
-  
-  
   Cypress.on('uncaught:exception', (err, runnable) => {
     // esse trecho de código visa evitar um falso negativo para os testes por erro de script cruzado 
     return false
   })
   
-  
-  it.only('Cadastro com sucesso de pessoa física', () => {
-
-    // const user_data = {
-    //   'firstName': 'Lucas',
-    //   'lastName': 'Andrade',
-    //   'gender': 'Masculino',
-    //   'email': 
-    //   'cpf': faker.br.cpf(),
-    //   'day':'02',
-    //   'month':'05',
-    //   'year': '1995',
-    //   'password': 'Teste123',
-    // }
+  it('Cadastro com sucesso de pessoa física', () => {
 
     cy.visit('https://www.kanui.com.br/')
     cy.get('.header-login-link').contains('Entrar').click()
     cy.get('.accordion-link').contains('Quero me cadastrar').click()
     cy.get('#RegistrationForm_customer_personality_0').click()
-    cy.get('#RegistrationForm_first_name').type('gggg')
-    cy.get('#RegistrationForm_last_name').type('lastName')
+    cy.get('#RegistrationForm_first_name').type('Lucas')
+    cy.get('#RegistrationForm_last_name').type('Andrade')
     cy.get('#RegistrationForm_email').type('lucas_a'+ faker.random.number() +'@hotmail.com')
     cy.get('#RegistrationForm_gender').select('Masculino')
-    cy.get('#RegistrationForm_tax_identification').type(faker.br.cpf(), { parseSpecialCharSequences: false,})
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cpf(), { parseSpecialCharSequences: false})
     cy.get('#RegistrationForm_day').select('04')
     cy.get('#RegistrationForm_month').select('02')
     cy.get('#RegistrationForm_year').select('1992')
-    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false,})
-    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false,})
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
     cy.get('#customer-account-create').click()
   
-    // cy.url().should('contain', '/customer/account/home')
-    // cy.get('.header-login-welcome-name').should('have.text','Lucas')
+    cy.url().should('contain', '/customer/account/home')
+    cy.get('.header-login-welcome-name').should('have.text','Lucas')
   })
 
   it('Cadastro com sucesso de pessoa jurídica', () => {
-    // cy.visit('https://www.kanui.com.br/')
-    // cy.get('.header-login-link').contains('Entrar').click()
-    // cy.get('.accordion-link').contains('Quero me cadastrar').click()
-    // cy.get('#RegistrationForm_customer_personality_1').click()
 
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_1').click()
+    cy.get('#RegistrationForm_first_name').type('Loja da Looh')
+    cy.get('#RegistrationForm_state_registration_exempt').click()
+    cy.get('#RegistrationForm_email').type('lojinha'+ faker.random.number() +'@hotmail.com')
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cnpj(), { parseSpecialCharSequences: false})
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.url().should('contain', '/customer/account/home')
+    cy.get('.header-login-welcome-name').should('have.text','Loja')
   })
 
-  it('Erro no cadastro - Email inválido', () => {
-    
+  it('Erro no cadastro PF- Email inválido', () => {
+
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_0').click()
+    cy.get('#RegistrationForm_first_name').type('Lucas')
+    cy.get('#RegistrationForm_last_name').type('Andrade')
+    cy.get('#RegistrationForm_email').type('lucas_a')
+    cy.get('#RegistrationForm_gender').select('Masculino')
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cpf(), { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_day').select('04')
+    cy.get('#RegistrationForm_month').select('02')
+    cy.get('#RegistrationForm_year').select('1992')
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.parsley-type').should('include.text','E-mail inválido')
   })
 
-  it('Erro no cadastro - Email já cadastrado', () => {
-    
+  it('Erro no cadastro PJ- Email inválido', () => {
+
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_1').click()
+    cy.get('#RegistrationForm_first_name').type('Loja da Looh')
+    cy.get('#RegistrationForm_state_registration_exempt').click()
+    cy.get('#RegistrationForm_email').type('lojinha23479')
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cnpj(), { parseSpecialCharSequences: false})
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.parsley-required').should('include.text','Preencha os campos')
+    cy.get('.parsley-type').should('include.text','E-mail inválido')
+  })
+
+  it.only('Erro no cadastro PF- Email já cadastrado', () => {
+
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_0').click()
+    cy.get('#RegistrationForm_first_name').type('Lucas')
+    cy.get('#RegistrationForm_last_name').type('Andrade')
+    cy.get('#RegistrationForm_email').type('lucas_a97748@hotmail.com')
+    cy.get('#RegistrationForm_gender').select('Masculino')
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cpf(), { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_day').select('04')
+    cy.get('#RegistrationForm_month').select('02')
+    cy.get('#RegistrationForm_year').select('1992')
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+  
+    cy.get('.message-description').should('include.text','E-mail').and('include.text', 'já cadastrado')  
+  })
+
+  it.only('Erro no cadastro PJ- Email já cadastrado', () => {
+
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_1').click()
+    cy.get('#RegistrationForm_first_name').type('Loja da Looh')
+    cy.get('#RegistrationForm_state_registration_exempt').click()
+    cy.get('#RegistrationForm_email').type('lojinha23479@hotmail.com')
+    cy.get('#RegistrationForm_tax_identification').type(faker.br.cnpj(), { parseSpecialCharSequences: false})
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.message-description').should('include.text','E-mail').and('include.text', 'já cadastrado')
   })
 
   it('Erro no cadastro - CPF inválido', () => {
     
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_0').click()
+    cy.get('#RegistrationForm_first_name').type('Lucas')
+    cy.get('#RegistrationForm_last_name').type('Andrade')
+    cy.get('#RegistrationForm_email').type('lucas_a'+ faker.random.number() +'@hotmail.com')
+    cy.get('#RegistrationForm_gender').select('Masculino')
+    cy.get('#RegistrationForm_tax_identification').type('25150475051')
+    cy.get('#RegistrationForm_day').select('04')
+    cy.get('#RegistrationForm_month').select('02')
+    cy.get('#RegistrationForm_year').select('1992')
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.errorMessage').should('include.text','CPF').and('include.text', 'inválido')
+
   })
 
-  it('Erro no cadastro - CPF já cadastrado', () => {
+  it.only('Erro no cadastro - CPF já cadastrado', () => {
     
-    //const mensage= cy.get('.message').should('be.disabled')
-    //expect().to.contains('CPF já cadastrado')
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_0').click()
+    cy.get('#RegistrationForm_first_name').type('Lucas')
+    cy.get('#RegistrationForm_last_name').type('Andrade')
+    cy.get('#RegistrationForm_email').type('lucas_a'+ faker.random.number() +'@hotmail.com')
+    cy.get('#RegistrationForm_gender').select('Masculino')
+    cy.get('#RegistrationForm_tax_identification').type('13279535280')
+    cy.get('#RegistrationForm_day').select('04')
+    cy.get('#RegistrationForm_month').select('02')
+    cy.get('#RegistrationForm_year').select('1992')
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.message-description').should('include.text','CPF').and('include.text', 'já cadastrado')
+
   })
 
-  it('Erro no cadastro - Usuário já cadastrado', () => {
+  it('Erro no cadastro - CNPJ inválido', () => {
+
+    cy.visit('https://www.kanui.com.br/')
+    cy.get('.header-login-link').contains('Entrar').click()
+    cy.get('.accordion-link').contains('Quero me cadastrar').click()
+    cy.get('#RegistrationForm_customer_personality_1').click()
+    cy.get('#RegistrationForm_first_name').type('Loja da Looh')
+    cy.get('#RegistrationForm_state_registration_exempt').click()
+    cy.get('#RegistrationForm_email').type('lojinha'+ faker.random.number() +'@hotmail.com')
+    cy.get('#RegistrationForm_tax_identification').type('36214538000107')
+    cy.get('#form-customer-account-password').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#RegistrationForm_password2').type('Teste123', { parseSpecialCharSequences: false})
+    cy.get('#customer-account-create').click()
+
+    cy.get('.errorMessage').should('include.text','CNPJ').and('include.text', 'inválido')
+
+  })
+
+  it('Erro no cadastro - CNPJ já cadastrado', () => {
     
+  })
+
+  it('Erro no cadastro - Data de nascimento inválida', () => {
+
   })
 })
