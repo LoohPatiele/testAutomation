@@ -19,7 +19,7 @@ Você deve visualizar a interface do Cypress. Escolha o browser da sua preferenc
 
 > OBS: Como testes E2E são pesados recomendo dar skip em alguns cenários e rodas apenas alguns por vez. 
 
-Acesse o relatório completo a partir da opção "Runs" na lateral esquerda da tela.
+Acesse o relatório completo do cypress a partir da opção "Runs" na lateral esquerda da tela.
 
 
 
