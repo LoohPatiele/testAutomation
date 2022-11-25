@@ -23,36 +23,3 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-
-Cypress.Commands.add('generateUser',() => {
-    const faker = require('faker-br')
-
-    // cy.writeFile('cypress/fixtures/user.json', {
-    //     "user": Cypress._.times(5 , () => {
-    //         return{
-    //             'firstName': 'Lucas',
-    //             'lastName': 'Andrade',
-    //             'gender': 'Masculino',
-    //             'email': 'lucas_a'+ faker.random.number() +'@hotmail.com',
-    //             'cpf': faker.br.cpf(),
-    //             'day':'02',
-    //             'month':'05',
-    //             'year': '1995',
-    //             'password': 'Teste123',
-    //         }
-    //     })
-    // })
-
-    // cy.writeFile('cypress/fixtures/user.json', {
-
-    //     'firstName': 'Lucas',
-    //     'lastName': 'Andrade',
-    //     'gender': 'Masculino',
-    //     'email': 'lucas_a'+ faker.random.number() +'@hotmail.com',
-    //     'cpf': faker.br.cpf(),
-    //     'day':'02',
-    //     'month':'05',
-    //     'year': '1995',
-    //     'password': 'Teste123',
-    // })
-})
